@@ -15,7 +15,6 @@ package mylog
 
 import (
 	"fmt"
-	"github.com/annchain/OG/arefactor/common/utilfuncs"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"io"

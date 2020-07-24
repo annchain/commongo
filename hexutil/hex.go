@@ -2,7 +2,6 @@ package hexutil
 
 import (
 	"encoding/hex"
-	"github.com/annchain/OG/arefactor/common/utilfuncs"
 )
 
 // FromHex returns the bytes represented by the hexadecimal string s.

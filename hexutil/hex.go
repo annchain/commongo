@@ -2,6 +2,7 @@ package hexutil
 
 import (
 	"encoding/hex"
+	"github.com/annchain/commongo/utilfuncs"
 )
 
 // FromHex returns the bytes represented by the hexadecimal string s.

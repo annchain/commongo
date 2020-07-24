@@ -15,6 +15,7 @@ package mylog
 
 import (
 	"fmt"
+	"github.com/annchain/commongo/utilfuncs"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/sirupsen/logrus"
 	"io"

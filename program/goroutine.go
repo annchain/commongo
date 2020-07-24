@@ -1,4 +1,4 @@
-package goroutine
+package program
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 )
 
 func WithRecover(handler func()) {
-	//todo we can handle goroutine num here
+	//todo we can handle program num here
 	go func() {
 		defer DumpStack(false)
 		handler()
@@ -20,8 +20,8 @@ func WithRecover(handler func()) {
 
 func DumpStack(exitIFPanic bool) {
 	if err := recover(); err != nil {
-		fmt.Println("goroutine num ", runtime.NumGoroutine())
-		logrus.WithField("obj", err).Error("Fatal error occurred. Program will exit")
+		fmt.Println("program num ", runtime.NumGoroutine())
+		logrus.WithField("obj", err).Error("Fatal error occurred.")
 		var buf bytes.Buffer
 		stack := debug.Stack()
 		buf.WriteString(fmt.Sprintf("Panic: %v\n", err))
@@ -32,9 +32,9 @@ func DumpStack(exitIFPanic bool) {
 			fmt.Println("write dump file error", nerr)
 			fmt.Println(buf.String())
 		}
-		logrus.Errorf("panic %v ", buf.String())
+
 		if exitIFPanic {
-			panic(err)
+			logrus.Fatalf("panic %v ", buf.String())
 		}
 	}
 }

@@ -85,3 +85,27 @@ func LogInit(level logrus.Level) {
 	logrus.SetLevel(level)
 	//logrus.SetReportCaller(true)
 }
+
+func LogLevel(text string) (level logrus.Level) {
+	// Only log the warning severity or above.
+	switch text {
+	case "panic":
+		return logrus.PanicLevel
+	case "fatal":
+		return logrus.FatalLevel
+	case "error":
+		return logrus.ErrorLevel
+	case "warn":
+		return logrus.WarnLevel
+	case "info":
+		return logrus.InfoLevel
+	case "debug":
+		return logrus.DebugLevel
+	case "trace":
+		return logrus.TraceLevel
+	default:
+		fmt.Println("Unknown level", text, "Set to INFO")
+		return logrus.InfoLevel
+	}
+
+}

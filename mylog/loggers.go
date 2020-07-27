@@ -16,34 +16,42 @@ package mylog
 import (
 	"fmt"
 	"github.com/annchain/commongo/utilfuncs"
-	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
-	"time"
 )
 
-func RotateLog(abspath string) *rotatelogs.RotateLogs {
-	logFile, err := rotatelogs.New(
-		abspath+"%Y%m%d%H%M.log",
-		rotatelogs.WithLinkName(abspath+".log"),
-		rotatelogs.WithMaxAge(24*time.Hour*7),
-		rotatelogs.WithRotationTime(time.Hour*24),
-	)
-	utilfuncs.PanicIfError(err, "err init log")
+type LogConfig struct {
+	MaxSize    int
+	MaxBackups int
+	MaxAgeDays int
+	Compress   bool
+	LogDir     string
+	OutputFile string
+}
+
+func RotateLog(abspath string, config LogConfig) *lumberjack.Logger {
+	logFile := &lumberjack.Logger{
+		Filename:   abspath,
+		MaxSize:    config.MaxSize, // megabytes
+		MaxBackups: config.MaxBackups,
+		MaxAge:     config.MaxAgeDays, //days
+		Compress:   config.Compress,   // disabled by default
+	}
 	return logFile
 }
 
-func InitLogger(logger *logrus.Logger, logdir string, outputFile string) *logrus.Logger {
+func InitLogger(logger *logrus.Logger, config LogConfig) *logrus.Logger {
 	var writer io.Writer
-	if logdir != "" {
-		folderPath, err := filepath.Abs(logdir)
-		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on parsing log path: %s", logdir))
+	if config.LogDir != "" {
+		folderPath, err := filepath.Abs(config.LogDir)
+		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on parsing log path: %s", config.LogDir))
 
-		abspath, err := filepath.Abs(path.Join(logdir, outputFile))
-		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on parsing log file path: %s", logdir))
+		abspath, err := filepath.Abs(path.Join(config.LogDir, config.OutputFile))
+		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on parsing log file path: %s", config.LogDir))
 
 		err = os.MkdirAll(folderPath, os.ModePerm)
 		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on creating log dir: %s", folderPath))
@@ -53,7 +61,7 @@ func InitLogger(logger *logrus.Logger, logdir string, outputFile string) *logrus
 		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on creating log file: %s", abspath))
 		//write  a message to just one  files
 
-		writer = io.MultiWriter(logger.Out, RotateLog(abspath))
+		writer = io.MultiWriter(logger.Out, RotateLog(abspath, config))
 	} else {
 		writer = logger.Out
 	}

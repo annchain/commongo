@@ -29,6 +29,18 @@ func MkDirIfNotExists(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
+func MkDirPermIfNotExists(path string, perm os.FileMode) error {
+	_, err := os.Stat(path)
+	if err == nil {
+		return nil
+	}
+	if !os.IsNotExist(err) {
+		return err
+	}
+
+	return os.MkdirAll(path, perm)
+}
+
 func FixPrefixPath(potentialRoot string, suffix string) (jointPath string) {
 	if potentialRoot == "" || path.IsAbs(suffix) {
 		return suffix

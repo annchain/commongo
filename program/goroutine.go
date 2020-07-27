@@ -20,12 +20,13 @@ func WithRecover(handler func()) {
 
 func DumpStack(exitIFPanic bool) {
 	if err := recover(); err != nil {
-		fmt.Println("program num ", runtime.NumGoroutine())
+		fmt.Println("go routine num ", runtime.NumGoroutine())
 		logrus.WithField("obj", err).Error("Fatal error occurred.")
 		var buf bytes.Buffer
 		stack := debug.Stack()
 		buf.WriteString(fmt.Sprintf("Panic: %v\n", err))
 		buf.Write(stack)
+		fmt.Println(buf.String())
 		dumpName := "dump_" + time.Now().Format("20060102-150405")
 		nerr := ioutil.WriteFile(dumpName, buf.Bytes(), 0644)
 		if nerr != nil {

@@ -56,7 +56,6 @@ func InitLogger(logger *logrus.Logger, config LogConfig) *logrus.Logger {
 		err = os.MkdirAll(folderPath, os.ModePerm)
 		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on creating log dir: %s", folderPath))
 
-		logrus.WithField("path", abspath).Info("Additional logger")
 		//logFile, err := os.OpenFile(abspath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		utilfuncs.PanicIfError(err, fmt.Sprintf("Error on creating log file: %s", abspath))
 		//write  a message to just one  files

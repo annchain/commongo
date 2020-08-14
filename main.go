@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/annchain/commongo/format"
 	"github.com/annchain/commongo/pq"
 	"github.com/annchain/commongo/todolist"
 	"time"
@@ -60,6 +61,12 @@ func todolistTest() {
 	}
 }
 
+func timeFormatTest() {
+	fmt.Println(format.FormatTimeToStandard(time.Now()))
+}
+
 func main() {
-	todolistTest()
+	//todolistTest()
+	timeFormatTest()
+
 }

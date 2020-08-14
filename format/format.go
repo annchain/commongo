@@ -52,3 +52,7 @@ func PrettyJson(data interface{}) (string, error) {
 	}
 	return buffer.String(), nil
 }
+
+func FormatTimeToStandard(time time.Time) string {
+	return time.Format("2006-01-02 15:04:05")
+}

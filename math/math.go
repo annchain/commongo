@@ -40,3 +40,17 @@ func BiggerInt64(x, y int64) int64 {
 	}
 	return y
 }
+
+func SmallerUint64(x, y uint64) uint64 {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+func SmallerInt64(x, y int64) int64 {
+	if x < y {
+		return x
+	}
+	return y
+}

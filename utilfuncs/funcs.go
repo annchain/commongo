@@ -22,3 +22,10 @@ func DrainTimer(timer *time.Timer) {
 		}
 	}
 }
+
+func DrainTicker(timer *time.Ticker) {
+	select {
+	case <-timer.C:
+	default:
+	}
+}

@@ -113,3 +113,19 @@ func (t *TodoList) removeTaskNoLock(value Traceable) {
 		delete(t.todoItems, itemId)
 	}
 }
+
+func (t *TodoList) Count() int {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+	return len(t.todoItems)
+}
+
+func (t *TodoList) TaskIds() []string {
+	t.mu.RLock()
+	defer t.mu.RUnlock()
+	var keys []string
+	for k, _ := range t.todoItems {
+		keys = append(keys, k)
+	}
+	return keys
+}

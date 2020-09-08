@@ -2,7 +2,7 @@ package todolist
 
 import (
 	"container/list"
-	"github.com/sasha-s/go-deadlock"
+	"sync"
 	"time"
 )
 
@@ -27,8 +27,7 @@ type TodoList struct {
 
 	items     *list.List
 	todoItems map[string]*todoItem
-	//mu        sync.RWMutex
-	mu deadlock.RWMutex
+	mu        sync.RWMutex
 }
 
 func (t *TodoList) InitDefault() {

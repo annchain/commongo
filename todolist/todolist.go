@@ -61,22 +61,30 @@ func (t *TodoList) GetTask() (value Traceable) {
 	defer t.mu.Unlock()
 
 	found := false
-	for !found {
+	for {
 		// find one executable
 		if len(t.todoItems) == 0 {
 			return nil
 		}
+		// items should be sorted in lastExecutionTime desc
 		firstNode := t.items.Front()
 		firstItem := firstNode.Value.(*todoItem)
 
 		if firstItem.executedEver && firstItem.insertTime.Add(t.ExpireDuration).Before(time.Now()) {
 			// expire firstItem.
 			t.removeTaskNoLock(firstItem.value)
+			continue
 		}
 		if !firstItem.executedEver || firstItem.lastExecutionTime.Add(t.MinimumIntervalDuration).Before(time.Now()) {
 			// use
 			found = true
 		}
+		// whatever, break the loop so no blocking
+		break
+	}
+
+	if !found {
+		return nil
 	}
 
 	firstNode := t.items.Front()
